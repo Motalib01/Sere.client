@@ -129,29 +129,36 @@ document.body.className += ' jsenabled';
                   <div class="loginpanel">
                       <h2>Connexion</h2>
                       <div class="subcontent loginsub">
-                          <form id="login-form">
-                              <div class="loginform">
-                                  <div class="form-label"><label for="email">Adresse e-mail</label></div>
-                                  <div class="form-input">
-                                      <input type="email" name="email" id="email" size="30" required>
-                                  </div>
-
-                                  <div class="clearer"></div>
-                                  <div class="form-label"><label for="password">Mot de passe</label></div>
-                                  <div class="form-input">
-                                      <input type="password" name="password" id="password" size="30" required>
-                                  </div>
-                              </div>
-
-                              <div class="clearer"></div>
-                              <div class="rememberpass">
-                                  <input type="checkbox" name="remember" id="remember">
-                                  <label for="remember">Se souvenir de moi</label>
-                              </div>
-
-                              <div class="clearer"></div>
-                              <button type="submit" id="loginbtn">Connexion</button>
-                          </form>
+                        <form id="login-form">
+                            <div class="loginform">
+                                <div class="form-label">
+                                    <label for="email">Adresse e-mail</label>
+                                </div>
+                                <div class="form-input">
+                                    <input type="email" name="email" id="email" size="30" required>
+                                </div>
+                        
+                                <div class="clearer"></div>
+                        
+                                <div class="form-label">
+                                    <label for="password">Mot de passe</label>
+                                </div>
+                                <div class="form-input">
+                                    <input type="password" name="password" id="password" size="30" required>
+                                </div>
+                            </div>
+                        
+                            <div class="clearer"></div>
+                        
+                            <div class="rememberpass">
+                                <input type="checkbox" name="remember" id="remember">
+                                <label for="remember">Se souvenir de moi</label>
+                            </div>
+                        
+                            <div class="clearer"></div>
+                        
+                            <button type="submit" id="loginbtn">Connexion</button>
+                        </form>
 
                           <div class="forgetpass">
                               <a href="forgot_password.php">Mot de passe oublié ?</a>
@@ -175,47 +182,50 @@ document.body.className += ' jsenabled';
   </div>
 </div>
 
+
+
+
+<!-- JavaScript Logic -->
 <script>
-  document.getElementById('login-form').addEventListener('submit', async (e) => {
-      e.preventDefault();
+    // Handle Form Submission
+    document.getElementById('login-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
 
-      const email = document.getElementById('email').value;
-      const password = document.getElementById('password').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const remember = document.getElementById('remember').checked;
 
-      try {
-          const response = await fetch('http://sere.runasp.net/api/User', {
-              method: 'POST',
-              headers: {
-                  'Content-Type': 'application/json'
-              },
-              body: JSON.stringify({ email, password })
-          });
+            try {
+                const response = await fetch('http://sere.runasp.net/api/User', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ email, password, remember })
+                });
 
-          if (!response.ok) {
-              throw new Error('Erreur lors de la connexion.');
-          }
+                // Handle empty or invalid JSON response safely
+                let data = null;
+                if (response.ok && response.headers.get("Content-Type")?.includes("application/json")) {
+                    data = await response.json();
+                    console.log('Connexion réussie :', data);
+                }
 
-          const data = await response.json();
-          alert('Connexion réussie ! Bienvenue ' + data.firstName);
-          // Rediriger ou gérer la connexion réussie
-          window.location.href = '/dashboard.html';
-      } catch (error) {
-          alert('Erreur : ' + error.message);
-      }
-  });
+                // Redirect to the E-learning platform
+                window.location.href = 'https://elearning.univ-constantine2.dz/elearning/';
 
-  function loginAsGuest() {
-      alert('Connexion anonyme en cours...');
-      window.location.href = '/guest-dashboard.html';
-  }
+            } catch (error) {
+                console.error('Erreur lors de la connexion :', error);
+                window.location.href = 'https://elearning.univ-constantine2.dz/elearning/';
+            }
+        });
+
+        // Guest Login Function
+        function loginAsGuest() {
+            alert('Connexion anonyme en cours...');
+            window.location.href = 'https://elearning.univ-constantine2.dz/elearning/';
+        }
 </script>
-
-
-
-
-
-
-
 
 
 

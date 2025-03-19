@@ -189,7 +189,7 @@ document.body.className += ' jsenabled';
 <!--hh-->
 <script>
     // Handle Form Submission
-    document.getElementById('login-form').addEventListener('submit', async (e) => {
+   document.getElementById('login-form').addEventListener('submit', async (e) => {
     e.preventDefault();
 
     const email = document.getElementById('email').value;
@@ -206,16 +206,23 @@ document.body.className += ' jsenabled';
             mode: 'cors'
         });
 
-        if (!response.ok) throw new Error('API Error: ' + response.status);
-
         const data = await response.json();
-        console.log('Success:', data);
+        console.log('Response Status:', response.status);
+        console.log('Response Body:', data);
+
+        if (!response.ok) {
+            alert(`Login failed: ${data.message || 'Unexpected error'}`);
+            return;
+        }
+
+        alert('Login Successful!');
         window.location.href = 'https://elearning.univ-constantine2.dz/elearning/';
     } catch (error) {
         console.error('Fetch Error:', error);
-        alert('Login failed. Please try again.');
+        alert('Network error. Please check your connection.');
     }
 });
+
 
 </script>
 
